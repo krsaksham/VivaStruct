@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student</title>
+<style>
+body { font-family:'Segoe UI'; background:#eef2f3; }
+.container { width:70%; margin:auto; margin-top:30px; }
+.card {
+    background:white; padding:20px; border-radius:10px;
+    margin-bottom:20px; box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+input, select { width:100%; padding:10px; margin:8px 0; }
+button {
+    padding:10px; background:#764ba2; color:white;
+    border:none; border-radius:5px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="card">
+<h2>Student Panel</h2>
+
+<form method="POST">
+    Name:
+    <input type="text" name="name">
+
+    Roll:
+    <input type="text" name="roll">
+
+    Select Test:
+    <select name="test_id">
+        {% for t in tests %}
+        <option value="{{ t }}">{{ t }}</option>
+        {% endfor %}
+    </select>
+
+    <button>Load Test</button>
+</form>
+</div>
+
+{% if questions %}
+<div class="card">
+<form method="POST">
+    <input type="hidden" name="test_id" value="{{ request.form.test_id }}">
+    <input type="hidden" name="name" value="{{ request.form.name }}">
+    <input type="hidden" name="roll" value="{{ request.form.roll }}">
+
+    {% for q in questions %}
+        <p><b>{{ q.question }}</b></p>
+        <input type="text" name="answer_{{ loop.index0 }}">
+    {% endfor %}
+
+    <button>Submit</button>
+</form>
+</div>
+{% endif %}
+
+{% if results %}
+<div class="card">
+<h3>Results</h3>
+
+{% for r in results %}
+<p>{{ r.question }} → {{ r.marks }}/{{ r.max_marks }}</p>
+{% endfor %}
+
+<h2>Total: {{ total_marks }}/{{ total_max }}</h2>
+</div>
+{% endif %}
+
+</div>
+</body>
+</html>

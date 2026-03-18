@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Records</title>
+<style>
+body { font-family:'Segoe UI'; background:#f4f6f9; }
+.container { width:70%; margin:auto; margin-top:30px; }
+table {
+    width:100%; border-collapse: collapse; background:white;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+th, td {
+    padding:12px; text-align:center; border-bottom:1px solid #ddd;
+}
+th { background:#667eea; color:white; }
+button {
+    padding:6px 10px; background:red; color:white;
+    border:none; border-radius:5px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h2>Student Records</h2>
+
+<table>
+<tr>
+<th>Name</th>
+<th>Roll</th>
+<th>Marks</th>
+<th>Action</th>
+</tr>
+
+{% for s in students %}
+<tr>
+<td>{{ s[1] }}</td>
+<td>{{ s[2] }}</td>
+<td>{{ s[3] }}/{{ s[4] }}</td>
+<td>
+<a href="/delete_record/{{ s[0] }}">
+<button>Delete</button>
+</a>
+</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+</body>
+</html>
