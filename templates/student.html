@@ -5,71 +5,108 @@
 <style>
 body { font-family:'Segoe UI'; background:#eef2f3; }
 .container { width:70%; margin:auto; margin-top:30px; }
+.nav { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+.nav a {
+    text-decoration:none; color:#334155; font-weight:600;
+    background:#ffffff; padding:10px 14px; border-radius:8px;
+    box-shadow:0 0 10px rgba(0,0,0,0.08);
+}
 .card {
     background:white; padding:20px; border-radius:10px;
     margin-bottom:20px; box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
-input, select { width:100%; padding:10px; margin:8px 0; }
+.card h2, .card h3 { margin-top:0; }
+.hero-copy {
+    color:#475569;
+    margin-top:-6px;
+    margin-bottom:18px;
+}
+input, select, textarea { width:100%; padding:10px; margin:8px 0; }
+textarea { min-height:90px; resize:vertical; }
 button {
     padding:10px; background:#764ba2; color:white;
     border:none; border-radius:5px;
 }
+.voice-btn {
+    margin-top:4px; background:#2f855a;
+}
+.score {
+    color:#555; font-size:14px;
+}
 </style>
 </head>
-
 <body>
 <div class="container">
-
+<div class="nav">
+<a href="/">Back to Dashboard</a>
+<a href="/records">View Records</a>
+</div>
 <div class="card">
 <h2>Student Panel</h2>
-
+<p class="hero-copy">Load a test, answer each question in text or by voice, and review the hybrid evaluation instantly.</p>
 <form method="POST">
     Name:
-    <input type="text" name="name">
-
+    <input type="text" name="name" value="{{ student_name }}" required>
     Roll:
-    <input type="text" name="roll">
-
+    <input type="text" name="roll" value="{{ student_roll }}" required>
     Select Test:
     <select name="test_id">
         {% for t in tests %}
-        <option value="{{ t }}">{{ t }}</option>
+        <option value="{{ t }}" {% if t == selected_test_id %}selected{% endif %}>{{ t }}</option>
         {% endfor %}
     </select>
-
-    <button>Load Test</button>
+    <button type="submit" name="action" value="load">Load Test</button>
 </form>
 </div>
-
 {% if questions %}
 <div class="card">
 <form method="POST">
-    <input type="hidden" name="test_id" value="{{ request.form.test_id }}">
-    <input type="hidden" name="name" value="{{ request.form.name }}">
-    <input type="hidden" name="roll" value="{{ request.form.roll }}">
-
+    <input type="hidden" name="action" value="submit">
+    <input type="hidden" name="test_id" value="{{ selected_test_id }}">
+    <input type="hidden" name="name" value="{{ student_name }}">
+    <input type="hidden" name="roll" value="{{ student_roll }}">
     {% for q in questions %}
         <p><b>{{ q.question }}</b></p>
-        <input type="text" name="answer_{{ loop.index0 }}">
+        <textarea id="answer_{{ loop.index0 }}" name="answer_{{ loop.index0 }}" placeholder="Type or use voice input"></textarea>
+        <button type="button" class="voice-btn" onclick="startVoiceInput('answer_{{ loop.index0 }}')">Use Voice</button>
     {% endfor %}
-
-    <button>Submit</button>
+    <button type="submit">Submit</button>
 </form>
 </div>
 {% endif %}
-
 {% if results %}
 <div class="card">
 <h3>Results</h3>
-
 {% for r in results %}
-<p>{{ r.question }} → {{ r.marks }}/{{ r.max_marks }}</p>
+<p><b>{{ r.question }}</b>: {{ r.marks }}/{{ r.max_marks }}</p>
+<p class="score">Semantic: {{ r.semantic_score }}, Keyword: {{ r.keyword_score }}, Final: {{ r.final_score }}</p>
 {% endfor %}
-
 <h2>Total: {{ total_marks }}/{{ total_max }}</h2>
+<h2>Grade: {{ grade }}</h2>
 </div>
 {% endif %}
-
 </div>
+<script>
+function startVoiceInput(targetId) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Speech recognition is not supported in this browser.");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-IN";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        const input = document.getElementById(targetId);
+        input.value = input.value ? input.value + " " + transcript : transcript;
+    };
+
+    recognition.start();
+}
+</script>
 </body>
 </html>
