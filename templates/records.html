@@ -4,49 +4,101 @@
 <title>Records</title>
 <style>
 body { font-family:'Segoe UI'; background:#f4f6f9; }
-.container { width:70%; margin:auto; margin-top:30px; }
+.container { width:80%; margin:auto; margin-top:30px; }
+.nav { margin-bottom:18px; }
+.nav a {
+    text-decoration:none; color:#334155; font-weight:600;
+    background:#ffffff; padding:10px 14px; border-radius:8px;
+    box-shadow:0 0 10px rgba(0,0,0,0.08);
+}
 table {
     width:100%; border-collapse: collapse; background:white;
     box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 th, td {
     padding:12px; text-align:center; border-bottom:1px solid #ddd;
+    vertical-align: top;
 }
 th { background:#667eea; color:white; }
 button {
     padding:6px 10px; background:red; color:white;
     border:none; border-radius:5px;
 }
+details {
+    text-align:left;
+    background:#f8fafc;
+    border-radius:8px;
+    padding:10px 12px;
+}
+summary {
+    cursor:pointer;
+    color:#334155;
+    font-weight:600;
+}
+.answer-card {
+    margin-top:10px;
+    padding:10px;
+    background:white;
+    border:1px solid #e2e8f0;
+    border-radius:8px;
+}
+.meta {
+    font-size:13px;
+    color:#475569;
+    margin-top:8px;
+}
 </style>
 </head>
-
 <body>
 <div class="container">
+<div class="nav"><a href="/">Back to Dashboard</a></div>
 <h2>Student Records</h2>
-
 <table>
 <tr>
 <th>Name</th>
 <th>Roll</th>
 <th>Marks</th>
+<th>Grade</th>
+<th>Details</th>
 <th>Action</th>
 </tr>
-
 {% for s in students %}
 <tr>
 <td>{{ s[1] }}</td>
 <td>{{ s[2] }}</td>
 <td>{{ s[3] }}/{{ s[4] }}</td>
+<td>{{ s[5] }}</td>
+<td>
+<details>
+<summary>View Answers</summary>
+{% for item in evaluations_by_student.get(s[0], []) %}
+<div class="answer-card">
+<strong>Question:</strong> {{ item.question }}<br>
+<strong>Answer:</strong> {{ item.student_answer }}
+<div class="meta">
+Marks: {{ item.marks }}/{{ item.max_marks }} |
+Semantic: {{ item.semantic_score }} |
+Keyword: {{ item.keyword_score }} |
+Final: {{ item.final_score }}
+</div>
+</div>
+{% else %}
+<div class="answer-card">No evaluation details available.</div>
+{% endfor %}
+</details>
+</td>
 <td>
 <a href="/delete_record/{{ s[0] }}">
-<button>Delete</button>
+<button type="button">Delete</button>
 </a>
 </td>
 </tr>
+{% else %}
+<tr>
+<td colspan="6">No student records found yet.</td>
+</tr>
 {% endfor %}
-
 </table>
-
 </div>
 </body>
 </html>
