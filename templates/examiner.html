@@ -5,6 +5,8 @@
 <style>
 body { font-family:'Segoe UI'; background:#f4f6f9; }
 .container { width:70%; margin:auto; margin-top:30px; }
+.nav { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+.nav a { text-decoration:none; color:#334155; font-weight:600; background:#ffffff; padding:10px 14px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.08); }
 .box {
     background:white; padding:20px; border-radius:10px;
     box-shadow:0 0 10px rgba(0,0,0,0.1); margin-bottom:20px;
@@ -18,46 +20,41 @@ button {
 h2 { text-align:center; }
 </style>
 </head>
-
 <body>
 <div class="container">
-
+<div class="nav">
+<a href="/">Back to Dashboard</a>
+<a href="/student">Go to Student Panel</a>
+</div>
 <h2>Examiner Panel</h2>
-
 <div class="box">
 <form method="POST">
     Test ID:
-    <input type="text" name="test_id">
-
+    <input type="text" name="test_id" required>
     Question:
-    <input type="text" name="question">
-
+    <input type="text" name="question" required>
     Ideal Answer:
-    <input type="text" name="ideal">
-
+    <input type="text" name="ideal" required>
     Marks:
-    <input type="number" name="max_marks">
-
-    <button>Add Question</button>
+    <input type="number" name="max_marks" min="1" required>
+    <button type="submit">Add Question</button>
 </form>
 </div>
-
 <div class="box">
 <h3>All Tests</h3>
-
 {% for test_id, qs in tests.items() %}
     <h4>{{ test_id }}</h4>
-
     {% for q in qs %}
         <p>
         {{ q.question }} ({{ q.max_marks }})
-        <a href="/delete_question/{{ test_id }}/{{ loop.index0 }}">
-            <button class="delete">Delete</button>
+        <a href="/delete_question/{{ q.id }}">
+            <button type="button" class="delete">Delete</button>
         </a>
         </p>
     {% endfor %}
+{% else %}
+    <p>No saved tests yet.</p>
 {% endfor %}
-
 </div>
 </div>
 </body>
