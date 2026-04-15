@@ -4,51 +4,75 @@
 <title>VivaStruct</title>
 <style>
 body {
-    margin:0;
-    font-family: 'Segoe UI';
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color:white;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, "Times New Roman", serif;
+    background: linear-gradient(135deg, #6c7ae8, #8f5fd2);
+    color: white;
 }
 .container {
-    text-align:center;
-    margin-top:100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 24px;
 }
 .card {
-    background: rgba(255,255,255,0.1);
-    padding:40px;
-    border-radius:15px;
-    width:300px;
-    margin:auto;
-    backdrop-filter: blur(10px);
+    width: 330px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.10);
+    padding: 42px 34px;
+    border-radius: 18px;
+    box-shadow: 0 18px 45px rgba(45, 28, 80, 0.18);
+    backdrop-filter: blur(8px);
+}
+h1 {
+    margin: 0 0 14px;
+    font-size: 30px;
+    font-weight: 700;
+}
+p {
+    margin: 0 0 26px;
+    font-size: 18px;
+}
+a {
+    text-decoration: none;
 }
 button {
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border:none;
-    border-radius:8px;
-    background:#ffffff;
-    color:#333;
-    font-weight:bold;
-    cursor:pointer;
+    width: 100%;
+    padding: 13px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #333;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
 }
 button:hover {
-    background:#ddd;
+    background: #f0f0f0;
+}
+@media (max-width: 480px) {
+    .card {
+        width: 100%;
+        max-width: 330px;
+        padding: 34px 22px;
+    }
 }
 </style>
 </head>
 <body>
-
 <div class="container">
     <div class="card">
         <h1>VivaStruct</h1>
         <p>AI Powered Viva Evaluation</p>
-
-        <a href="/examiner"><button>Examiner Panel</button></a>
-        <a href="/student"><button>Student Panel</button></a>
-        <a href="/records"><button>View Records</button></a>
+        <a href="/examiner"><button type="button">Examiner Panel</button></a>
+        <a href="/student"><button type="button">Student Panel</button></a>
+        <a href="/records"><button type="button">View Records</button></a>
     </div>
 </div>
-
 </body>
 </html>
